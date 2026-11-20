@@ -195,7 +195,7 @@ def reservar():
             flash('Existencias insuficientes. No se realizó la reserva.', 'danger'); return redirect(url_for('carrito'))
         apartados.append({'producto_id': p['_id'], 'nombre': p['nombre'], 'precio': p['precio'], 'cantidad': qty})
     try:
-        rid = db.reservas.insert_one({'usuario_id': ObjectId(session['uid']), 'items': apartados, 'total': round(sum(x['subtotal'] for x in items), 2), 'estado': 'activa', 'creada': now(), 'vence': now() + timedelta(minutes=5)}).inserted_id
+        rid = db.reservas.insert_one({'usuario_id': ObjectId(session['uid']), 'items': apartados, 'total': round(sum(x['subtotal'] for x in items), 2), 'estado': 'activa', 'creada': now(), 'vence': now() + timedelta(seconds=15)}).inserted_id
     except Exception:
         for a in apartados: db.productos.update_one({'_id': a['producto_id']}, {'$inc': {'stock': a['cantidad']}})
         raise
